@@ -14,44 +14,80 @@ namespace sandss
         {
             Stopwatch stopwatch = new Stopwatch();
 
-            int Scale;
-            int.TryParse(Console.ReadLine(), out Scale); // Ввод ширины файла
+            int size;
+            int.TryParse(Console.ReadLine(), out size); // Ввод ширины файла
             stopwatch.Start();
-            Scale = (Scale % 2 == 0) ? Scale : Scale + 1; // Проверяем на чётность, чтобы можно было делить на 2 (:
-            Scale = (Scale % 2 == 0) ? Scale : Scale + 1;
-            int[,] pice = new int[Scale, Scale];
-            int Howmuch = 80000;
-            var sand = new Bitmap(Scale, Scale); // Создаём файл, где будет модель
-            pice[Scale / 2+2, Scale / 2+2] = Howmuch; // Добавляем песчинки в участок отрисовки
-            /* for (int g = 0; g < Howmuch/2; g++)
+            size = (size % 2 == 0) ? size : size + 1; // Проверяем на чётность, чтобы можно было делить на 2 (:
+            size = (size % 2 == 0) ? size : size + 1;
+            int[,] grains = new int[size, size];
+            int Howmuch = 160000;
+            var sand = new Bitmap(size, size); // Создаём файл, где будет модель
+            grains[size / 2, size / 2] = Howmuch; // Добавляем песчинки в участок отрисовки
+             for (int g = 0; g < Howmuch/2; g++)
              {
-                 for (int i = Scale / 2; i < Scale - 1; i++)
+                 for (int i = size / 2; i < size - 1; i++)
                  {
-                     for (int j = Scale / 2; j < Scale - 1; j++)
+                     for (int j = size / 2; j < size - 1; j++)
                      {
 
 
-                         while (pice[i, j] >= 4)
+                         while (grains[i, j] >= 4)
                          {
-                             if (i - 1 == Scale / 2)
+                             if (i - 1 == size / 2)
                              {
-                                 pice[i - 1, j]++;
+                                 grains[i - 1, j]++;
                              }
-                             if (j - 1 == Scale / 2)
+                             if (j - 1 == size / 2)
                              {
-                                 pice[i, j - 1]++;
+                                 grains[i, j - 1]++;
                              }
-                             pice[i, j] = pice[i, j] - 4;
-                             pice[i + 1, j]++;
-                             pice[i - 1, j]++;
-                             pice[i, j + 1]++;
-                             pice[i, j - 1]++;
+                             grains[i, j] = grains[i, j] - 4;
+                             grains[i + 1, j]++;
+                             grains[i - 1, j]++;
+                             grains[i, j + 1]++;
+                             grains[i, j - 1]++;
                          }
                      }
                  }
-             } */
-            Sand.Draw(ref sand, pice, Scale, Howmuch);
-             stopwatch.Stop();
+             }
+            for (int i = size / 2; i < size - 1; i++)
+            {
+                for (int j = size / 2; j < size - 1; j++)
+                {
+                    switch (grains[i, j])
+                    {
+                        case 0:
+                            sand.SetPixel(i, j, Color.Green);
+                            sand.SetPixel(size - i, j, Color.Green);
+                            sand.SetPixel(size - i, size - j, Color.Green);
+                            sand.SetPixel(i, size - j, Color.Green);
+                            break;
+                        case 1:
+                            sand.SetPixel(i, j, Color.Yellow);
+                            sand.SetPixel(size - i, j, Color.Yellow);
+                            sand.SetPixel(size - i, size - j, Color.Yellow);
+                            sand.SetPixel(i, size - j, Color.Yellow);
+                            break;
+                        case 2:
+                            sand.SetPixel(i, j, Color.Gray);
+                            sand.SetPixel(size - i, j, Color.Gray);
+                            sand.SetPixel(size - i, size - j, Color.Gray);
+                            sand.SetPixel(i, size - j, Color.Gray);
+                            break;
+                        case 3:
+                            sand.SetPixel(i, j, Color.Orange);
+                            sand.SetPixel(size - i, j, Color.Orange);
+                            sand.SetPixel(size - i, size - j, Color.Orange);
+                            sand.SetPixel(i, size - j, Color.Orange);
+                            break;
+                        default:
+                            sand.SetPixel(i, j, Color.White);
+                            break;
+                    }
+                }
+            }
+            sand.Save("d:\\sand2.bmp");
+            stopwatch.Stop();
              Console.WriteLine(stopwatch.ElapsedMilliseconds);
 
             /*  for (int i = 0; i < weight; i++)
